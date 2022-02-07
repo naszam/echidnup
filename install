@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -e
+
+GREEN="\033[0;32m"
+PURPLE="\033[0;35m"
+NC="\033[0m"
+
+echo -e ${GREEN}Installing ${PURPLE}echidnup${GREEN} to ${PURPLE}/usr/local/bin${GREEN}!${NC}
+
+ECHIDNUP='#!/usr/bin/env bash
+set -e
+GREEN="\033[0;32m"
+PURPLE="\033[0;35m"
+NC="\033[0m"
+if [[ "$1" == *echidna* ]]
+then
+    REPO=$1
+    COMMIT=${2-master}
+else
+    REPO="crytic/echidna"
+    COMMIT=${1-master}
+fi
+echo -e ${GREEN}Updating ${PURPLE}echidna${GREEN} to ${PURPLE}${REPO}${GREEN} at commit ${PURPLE}${COMMIT}${GREEN}!${NC}
+nix-env -i -f https://github.com/${REPO}/archive/${COMMIT}.tar.gz'
+
+BINARY="/usr/local/bin/echidnup"
+echo "$ECHIDNUP" > $BINARY
+chmod +x $BINARY
